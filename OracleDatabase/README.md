@@ -88,14 +88,19 @@ The Oracle Database inside the container also has Oracle Application Express con
 
 If you lack the ability to login using a password you could set an new password into the preinstalles APEX installation. Log into SQLPLUS and enter:
 
-	@$ORACLE_HOME/apex/apxxepwd admin
-
+```bash
+docker exec -ti OracleXE su -p oracle -c "sqlplus / as sysdba @$ORACLE_HOME/apex/apxxepwd.sql admin"
+```
 
 You might to install the latest version of APEX just when creating the container. For that please download the appropiate file from the [Oracle Application Express Downloads](http://www.oracle.com/technetwork/developer-tools/apex/downloads/index.html) page and put that file into the later described setup folder. ... together with the provided file [install_apex.sh](setup/install_apex.sh).
 Open up this file and adjust the pre-configured filename that it fits the name of the downloadefile.
 
 **ATTENTION**
-The setup process wll last much longer than without the upgrade. Finally you are asked entering new credentials for the APEX admin account.
+The setup process wll last much longer than without the upgrade. Finally you are asked entering new credentials for the APEX admin account. If no question appears you may log into sqlplus to execute the passwort reset script:
+
+```bash
+docker exec -ti OracleXE su -p oracle -c "sqlplus / as sysdba @/u01/app/oracle/oradata/dbconfig/XE/apxchpwd.sql"
+```
 
 
 ### Running scripts after setup and on startup
@@ -114,7 +119,9 @@ recommended to prefix your scripts with a number. For example `01_users.sql`, `0
 
 The example below mounts the local directory myScripts to `/opt/oracle/myScripts` which is then searched for custom startup scripts:
 
-    docker run --name OracleXE -p 1521:1521  -p 8080:8080 -p 33669:33669 -v /home/oracle/myScripts:/u01/app/oracle/scripts/startup -v /home/oracle/oradata:/opt/oracle/oradata thucke/oraclexe:11.2.0.2
+```bash
+docker run --name OracleXE -p 1521:1521  -p 8080:8080 -p 33669:33669 -v /home/oracle/myScripts:/u01/app/oracle/scripts/startup -v /home/oracle/oradata:/opt/oracle/oradata thucke/oraclexe:11.2.0.2
+```
     
 ## Further information
 Please see [Oracle Database on Docker Github page](https://github.com/oracle/docker-images/tree/master/OracleDatabase) for further information.
