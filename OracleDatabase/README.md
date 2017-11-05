@@ -43,7 +43,7 @@ To run your Oracle Database Express Edition Docker image use the **docker run** 
 	-p 1521:1521 -p 8080:8080 -p 33669:33669 \
 	-e ORACLE_PWD=<your database passwords> \
 	-v [<host mount point>:]/u01/app/oracle/oradata \
-	oracle/database:11.2.0.2-xe
+	thucke/oraclexe:11.2.0.2
 	
 	Parameters:
 	   --name:        The name of the container (default: auto generated)
@@ -90,7 +90,7 @@ You want to install the latest version of APEX just when creating the container.
 Open up this file and adjust the pre-configured filename that it fits the name of the downloadefile.
 
 **ATTENTION**
-The setup process wll last much longer than without the upgrade. FInally you are asked entering new credentials for the APEX admin account.
+The setup process wll last much longer than without the upgrade. Finally you are asked entering new credentials for the APEX admin account.
 
 
 ### Running scripts after setup and on startup
@@ -109,7 +109,7 @@ recommended to prefix your scripts with a number. For example `01_users.sql`, `0
 
 The example below mounts the local directory myScripts to `/opt/oracle/myScripts` which is then searched for custom startup scripts:
 
-    docker run --name oracle-ee -p 1521:1521 -v /home/oracle/myScripts:/opt/oracle/scripts/startup -v /home/oracle/oradata:/opt/oracle/oradata oracle/database:12.2.0.1-ee
+    docker run --name OracleXE -p 1521:1521  -p 8080:8080 -p 33669:33669 -v /home/oracle/myScripts:/u01/app/oracle/scripts/startup -v /home/oracle/oradata:/opt/oracle/oradata thucke/oraclexe:11.2.0.2
     
 ## Further information
 Please see [Oracle Database on Docker Github page](https://github.com/oracle/docker-images/tree/master/OracleDatabase) for further information.
