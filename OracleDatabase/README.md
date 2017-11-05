@@ -73,7 +73,7 @@ On the first startup of the container a random password will be generated for th
 	ORACLE PASSWORD FOR SYS AND SYSTEM:
 
 The password for those accounts can be changed via the **docker exec** command. **Note**, the container has to be running:
-	docker exec oraclexe /u01/app/oracle/setPassword.sh <your password>
+	docker exec <container name> /u01/app/oracle/setPassword.sh <your password>
 
 Once the container has been started you can connect to it just like to any other database:
 
@@ -86,10 +86,10 @@ The Oracle Database inside the container also has Oracle Application Express con
 
 	http://localhost:8080/apex/apex_admin
 
-If you lack the ability to login using a password you could set an new password into the preinstalles APEX installation. Log into SQLPLUS and enter:
+If you lack the ability to login using a password you could set an new password into the preinstalles APEX installation. After the following command has been executed you're able to login using credentials admin/admin.
 
 ```bash
-docker exec -ti OracleXE su -p oracle -c "sqlplus / as sysdba @$ORACLE_HOME/apex/apxxepwd.sql admin"
+docker exec -ti <container name> su -p oracle -c "sqlplus / as sysdba @$ORACLE_HOME/apex/apxxepwd.sql admin"
 ```
 
 You might to install the latest version of APEX just when creating the container. For that please download the appropiate file from the [Oracle Application Express Downloads](http://www.oracle.com/technetwork/developer-tools/apex/downloads/index.html) page and put that file into the later described setup folder. ... together with the provided file [install_apex.sh](setup/install_apex.sh).
@@ -99,7 +99,7 @@ Open up this file and adjust the pre-configured filename that it fits the name o
 The setup process wll last much longer than without the upgrade. Finally you are asked entering new credentials for the APEX admin account. If no question appears you may log into sqlplus to execute the passwort reset script:
 
 ```bash
-docker exec -ti OracleXE su -p oracle -c "sqlplus / as sysdba @/u01/app/oracle/oradata/dbconfig/XE/apxchpwd.sql"
+docker exec -ti <container name> su -p oracle -c "sqlplus / as sysdba @/u01/app/oracle/oradata/dbconfig/XE/apxchpwd.sql"
 ```
 
 
@@ -120,7 +120,7 @@ recommended to prefix your scripts with a number. For example `01_users.sql`, `0
 The example below mounts the local directory myScripts to `/opt/oracle/myScripts` which is then searched for custom startup scripts:
 
 ```bash
-docker run --name OracleXE -p 1521:1521  -p 8080:8080 -p 33669:33669 -v /home/oracle/myScripts:/u01/app/oracle/scripts/startup -v /home/oracle/oradata:/opt/oracle/oradata thucke/oraclexe:11.2.0.2
+docker run --name <container name> -p 1521:1521  -p 8080:8080 -p 33669:33669 -v /home/oracle/myScripts:/u01/app/oracle/scripts/startup -v /home/oracle/oradata:/opt/oracle/oradata thucke/oraclexe:11.2.0.2
 ```
     
 ## Further information
