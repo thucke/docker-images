@@ -104,7 +104,7 @@ To run your Oracle Database Express Edition Docker image use the **docker run** 
 
 	docker run --name <container name> \
 	--shm-size=1g \
-	-p 1521:1521 -p 8080:8080 \
+	-p 1521:1521 -p 8080:8080 -p 33669:33669 \
 	-e ORACLE_PWD=<your database passwords> \
 	-v [<host mount point>:]/u01/app/oracle/oradata \
 	oracle/database:11.2.0.2-xe
@@ -113,7 +113,7 @@ To run your Oracle Database Express Edition Docker image use the **docker run** 
 	   --name:        The name of the container (default: auto generated)
 	   --shm-size:    Amount of Linux shared memory
 	   -p:            The port mapping of the host port to the container port.
-	                  Two ports are exposed: 1521 (Oracle Listener), 8080 (APEX)
+	                  Three ports are exposed: 1521 (Oracle Listener), 8080 (APEX), 33669 (Shared server)
 	   -e ORACLE_PWD: The Oracle Database SYS, SYSTEM and PDB_ADMIN password (default: auto generated)
 
 	   -v /u01/app/oracle/oradata
@@ -127,33 +127,24 @@ To run your Oracle Database Express Edition Docker image use the **docker run** 
 	                  Optional: A volume with custom scripts to be run after database startup.
 	                  For further details see the "Running scripts after setup and on startup" section below.
 
-There are two ports that are exposed in this image:
+There are three ports that are exposed in this image:
 * 1521 which is the port to connect to the Oracle Database.
 * 8080 which is the port of Oracle Application Express (APEX).
+* 33669 which is the port to connect the running shared server dispatcher
 
 On the first startup of the container a random password will be generated for the database if not provided. You can find this password in the output line:
 
 	ORACLE PASSWORD FOR SYS AND SYSTEM:
-
-**Note:** The ORACLE_SID for Express Edition is always `XE` and cannot be changed, hence there is no ORACLE_SID parameter provided for the XE build.
 
 The password for those accounts can be changed via the **docker exec** command. **Note**, the container has to be running:
 	docker exec oraclexe /u01/app/oracle/setPassword.sh <your password>
 
 Once the container has been started you can connect to it just like to any other database:
 
-	sqlplus sys/<your password>@//localhost:1521/XE as sysdba
-	sqlplus system/<your password>@//localhost:1521/XE
+	sqlplus sys/<your password>@XE as sysdba
+	sqlplus system/<your password>@XE
 
-### Running SQL*Plus in a Docker container
-You may use the same Docker image you used to start the database, to run `sqlplus` to connect to it, for example:
-
-	docker run --rm -ti oracle/database:12.2.0.1-ee sqlplus pdbadmin/<yourpassword>@//<db-container-ip>:1521/ORCLPDB1
-
-Another option is to use `docker exec` and run `sqlplus` from within the same container already running the database:
-
-	docker exec -ti <container name> sqlplus pdbadmin@ORCLPDB1
-
+	
 ### Running scripts after setup and on startup
 The docker images can be configured to run scripts after setup and on startup. Currently `sh` and `sql` extensions are supported.
 For post-setup scripts just mount the volume `/opt/oracle/scripts/setup` or extend the image to include scripts in this directory.
@@ -172,15 +163,8 @@ The example below mounts the local directory myScripts to `/opt/oracle/myScripts
 
     docker run --name oracle-ee -p 1521:1521 -v /home/oracle/myScripts:/opt/oracle/scripts/startup -v /home/oracle/oradata:/opt/oracle/oradata oracle/database:12.2.0.1-ee
     
-## Known issues
-* The [`overlay` storage driver](https://docs.docker.com/engine/userguide/storagedriver/selectadriver/) on CentOS has proven to run into Docker bug #25409. We recommend using `btrfs` or `overlay2` instead. For more details see issue #317.
-
-## Frequently asked questions
-Please see [FAQ.md](./FAQ.md) for frequently asked questions.
-
-## Support
-Oracle Database in single instance configuration is supported for Oracle Linux 7 and Red Hat Enterprise Linux (RHEL) 7.
-For more details please see My Oracle Support note: **Oracle Support for Database Running on Docker (Doc ID 2216342.1)**
+## Further information
+Please see [Oracle Database on Docker Github page](https://github.com/oracle/docker-images/tree/master/OracleDatabase) for further information.
 
 ## License
 To download and run Oracle Database, regardless whether inside or outside a Docker container, you must download the binaries from the Oracle website and accept the license indicated at that page.
