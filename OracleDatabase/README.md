@@ -114,6 +114,8 @@ The example below mounts the local directory myScripts to `/opt/oracle/myScripts
 ## Further information
 Please see [Oracle Database on Docker Github page](https://github.com/oracle/docker-images/tree/master/OracleDatabase) for further information.
 
+You may also make use of the [Oracle SQL Developer](http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/index.html) to access your newly installed database.
+
 ## License
 To download and run Oracle Database, regardless whether inside or outside a Docker container, you must download the binaries from the Oracle website and accept the license indicated at that page.
 
