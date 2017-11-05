@@ -86,7 +86,12 @@ The Oracle Database inside the container also has Oracle Application Express con
 
 	http://localhost:8080/apex/apex_admin
 
-You want to install the latest version of APEX just when creating the container. For that please download the appropiate file from the [Oracle Application Express Downloads](http://www.oracle.com/technetwork/developer-tools/apex/downloads/index.html) page and put that file into the later described setup folder. ... together with the provided file [install_apex.sh](setup/install_apex.sh).
+If you lack the ability to login using a password you could set an new password into the preinstalles APEX installation. Log into SQLPLUS and enter:
+
+	@$ORACLE_HOME/apex/apxxepwd admin
+
+
+You might to install the latest version of APEX just when creating the container. For that please download the appropiate file from the [Oracle Application Express Downloads](http://www.oracle.com/technetwork/developer-tools/apex/downloads/index.html) page and put that file into the later described setup folder. ... together with the provided file [install_apex.sh](setup/install_apex.sh).
 Open up this file and adjust the pre-configured filename that it fits the name of the downloadefile.
 
 **ATTENTION**
